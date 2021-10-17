@@ -1,0 +1,15 @@
+body {
+    font-size: 32px; 
+    font-family: Arial;
+}
+
+#notification {
+    display: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    padding: 12px;
+    border-radius: 32px;
+}
