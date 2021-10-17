@@ -1,5 +1,5 @@
-# Mentega Text-to-Speech
-A simple Twitch Text-to-Speech with (very unreliable) multi language (Indonesian, English, and Japanese) support! Please follow my Twitch at [https://www.twitch.tv/mentegagoreng](https://www.twitch.tv/mentegagoreng) if you want to see the TTS on action.
+# 🧈 Mentega Text-to-Speech 🧈
+A simple Twitch Text-to-Speech with (very unreliable) multi language (🇮🇩 Indonesian, 🇺🇸 English, and 🇯🇵 Japanese) support! Please follow my Twitch at [https://www.twitch.tv/mentegagoreng](https://www.twitch.tv/mentegagoreng) if you want to see the TTS on action. _Or just follow me anyway. Seriously tho._
 
 ## Installation
 This software runs on the browser, so you can either open the URL or add it to your OBS browser source. I personally prefer using OBS browser source since I can have more freedom to adjust the audio, such as setting the volume or the audio track.
@@ -9,7 +9,7 @@ The URL:
 {path_to_index.html}#token={your oauth token}&username={your username}&channel={target channel}
 ````
 
-1. Download the files from [here](/releases/latest).
+1. Download the files from [here](https://github.com/mentegago/mentega-tts/releases/latest).
 2. Unzip and open `index.html`.
 3. Copy the address bar and replace `{path_to_index.html}` in the link above with the URL from the address bar.
 4. Fill in the rest of the parameters.
@@ -20,7 +20,7 @@ Parameters:
 - `channel`: Channel to which the TTS will run on.
 - (_Optional_) `hideNotifications`: set to `true` to hide notification message that shows up on top left corner of the screen.
 
-The parameters are put in hash (`#`) instead of query (`?`) so you that your OAuth token never leaves the client (except to Twitch). That way, there's no worry of your OAuth token being logged by GitHub's server.
+The parameters are put in hash (`#`) instead of query (`?`) so you that your OAuth token never leaves the client (except to Twitch). That way, there's no worry of your OAuth token being logged by any server.
 
 If you open the URL in your browser, do note that:
 1. **You'll need to refresh the page** everytime you change any of the parameters as the software doesn't listen to window hash changes.
