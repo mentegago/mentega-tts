@@ -1,18 +1,19 @@
 # 🧈 Mentega Text-to-Speech 🧈
+### [Klik di sini untuk instruksi dalam Bahasa Indonesia](README_ID.md)
 A simple Twitch Text-to-Speech with (very unreliable) multi language (🇮🇩 Indonesian, 🇺🇸 English, and 🇯🇵 Japanese) support! Please follow my Twitch at [https://www.twitch.tv/mentegagoreng](https://www.twitch.tv/mentegagoreng) if you want to see the TTS on action. _Or just follow me anyway. Seriously tho._
 
 ## Installation
 This software runs on the browser, so you can either open the URL or add it to your OBS browser source. I personally prefer using OBS browser source since I can have more freedom to adjust the audio, such as setting the volume or the audio track.
 
-The URL:
-````
-{path_to_index.html}#token={your oauth token}&username={your username}&channel={target channel}
-````
-
 1. Download the files from [here](https://github.com/mentegago/mentega-tts/releases/latest).
 2. Unzip and open `index.html`.
-3. Copy the address bar and replace `{path_to_index.html}` in the link above with the URL from the address bar.
-4. Fill in the rest of the parameters.
+3. Add this to **the end** of the URL:
+
+````
+#token={your oauth token}&username={your username}&channel={target channel}
+````
+
+4. Fill in the parameters with these values:
 
 Parameters:
 - `token`: Your oauth token. Get your token here: [https://twitchapps.com/tmi/](https://twitchapps.com/tmi/).
