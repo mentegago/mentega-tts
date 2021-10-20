@@ -32,6 +32,7 @@ function Twitch(username, token, channelName) {
             const messages = message.data.split('\r\n')
             messages.forEach(msg => {
                 const parts = msg.split(' ')
+                console.log(msg)
                 if(parts[0] == 'PING') {
                     console.log('SENDING PONG...')
                     ws.send('PONG :tmi.twitch.tv')
@@ -43,6 +44,7 @@ function Twitch(username, token, channelName) {
                     const message = parts.slice(3).join(' ').substring(1)
     
                     if(this.onmessage) this.onmessage({ username: username, message: message })
+                    performCommandIfExists({ username: username, message: message })
                     return
                 }
 
@@ -51,7 +53,33 @@ function Twitch(username, token, channelName) {
                     console.log("JOINED to " + parts[2])
                     this.onjoin(parts[2])
                 }
+
+                if(parts[1] == 'PART') {
+                    console.log('LEFT ' + parts[2])
+                    this.onleave(parts[2])
+                    
+                    if(parts[2].toLowerCase() == channelName.toLowerCase()) {
+                        ws.close()
+                    }
+                }
             })
+        }
+
+        const performCommandIfExists = (message) => {
+            if(message.username.toLowerCase() != username.toLowerCase()) return // Not owner.
+            const commands = message.message.split(' ', 2)
+            const command = commands[0].toLowerCase()
+            if(command == '!join') {
+                if(!commands[1]) return
+                ws.send('JOIN #' + commands[1]) 
+            } else if(command == '!leave') {
+                if(!commands[1]) return
+                if(commands[1].toLowerCase() == channelName.toLowerCase()) {
+                    this.oncommanderror('Cannot leave your own channel!')
+                    return
+                }
+                ws.send('PART #' + commands[1])
+            }
         }
 
         webSocket = ws
@@ -65,6 +93,8 @@ function Twitch(username, token, channelName) {
     Twitch.prototype.onconnect = () => {}
     Twitch.prototype.onjoin = (channel) => {}
     Twitch.prototype.ondisconnect = () => {}
+    Twitch.prototype.onleave = (channel) => {}
+    Twitch.prototype.oncommanderror = (error) => {}
 
     Twitch.prototype.send = (message, channel) => {
         webSocket.send(`PRIVMSG #${channel} :${message}`)

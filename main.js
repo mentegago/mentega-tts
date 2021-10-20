@@ -83,6 +83,14 @@ if(!username || !token || !channel) {
     twitch.ondisconnect = () => {
         showNotification('❌ Mentega TTS disconnected ❌')
     }
+
+    twitch.onleave = (channel) => {
+        showNotification(`👋 Mentega TTS left ${channel} 👋`)
+    }
+
+    twitch.oncommanderror = (message) => {
+        showNotification(`❌ ${message} ❌`)
+    }
 }
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
