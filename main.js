@@ -23,7 +23,7 @@ function showNotification(notification, autoHide = true) {
 }
 
 if(!username || !token || !channel) {
-    showNotification('❌ Improper setup detected. Mentega TTS can\'t start. ❌', false)
+    showNotification('❌ Improper setup detected. Read README.md for installation instruction! ❌', false)
 } else {
     const twitch = new Twitch(
         username, 
@@ -41,32 +41,47 @@ if(!username || !token || !channel) {
             .substring(0, 200) // Limits to 200 characters
 
         if(msg.substring(0, 1) == '!') return // Ignore message that starts with exclamation mark.
+
+        // Start message with 'ID ', 'EN ', or 'JP ' to force the TTS to use a specific language voice.
+        const forcedLanguage = (() => {
+            const forcedLanguageString = msg.substring(0, 3).toLowerCase()
+            switch(forcedLanguageString) {
+                case 'id ':
+                    return 'indonesia'
+                case 'en ':
+                    return 'english'
+                case 'jp ':
+                    return 'japanese'
+            }
+
+            return null
+        })()
+
         const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
-        const lang = detectLanguage(msgForLang)
+        const lang = forcedLanguage || detectLanguage(msgForLang)
         const gTranslateLang = (lang) => {
             switch(lang.toLowerCase()) {
                 case 'english':
                     return 'en-US'
-                    break
                 case 'japanese':
                     return 'ja'
                 default:
                     return 'id_ID'
             }
         }
-        speaker.speak(msg, gTranslateLang(lang))
+        speaker.speak(forcedLanguage ? msg.substring(3) : msg, gTranslateLang(lang))
     }
 
     twitch.onconnect = () => {
-        showNotification('🧈 Mentega TTS Connected 🧈')
+        showNotification('🧈 Mentega TTS connect to Twitch 🧈')
     }
 
     twitch.onjoin = (channel) => {
-        showNotification(`🧈 Mentega TTS Joined ${channel} 🧈`)
+        showNotification(`🧈 Mentega TTS joined ${channel} 🧈`)
     }
 
     twitch.ondisconnect = () => {
-        showNotification('❌ Mentega TTS Disconnected ❌')
+        showNotification('❌ Mentega TTS disconnected ❌')
     }
 }
 
