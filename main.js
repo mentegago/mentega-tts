@@ -106,7 +106,7 @@ String.prototype.pachify = function (username) {
 }
 
 String.prototype.warafy = function (username) {
-    const waraRegex = /(( |^|\n|\r)w{1,}( |$|\n|\r))/g
+    const waraRegex = /(( |^|\n|\r)(w|ｗ)+( |$|\n|\r))/g
     const waraReplacement = 'わらわら'
     const warafied = this.replace(waraRegex, waraReplacement)
 
