@@ -38,6 +38,7 @@ if(!username || !token || !channel) {
         const msg = message.message
             .replace(/(?:https?|ftp):\/\/[\n\S]+/g, '') // Remove all URLs.
             .pachify(message.username) // パチfy!
+            .warafy(message.username) // わらfy!
             .substring(0, 200) // Limits to 200 characters
 
         if(msg.substring(0, 1) == '!') return // Ignore message that starts with exclamation mark.
@@ -69,7 +70,8 @@ if(!username || !token || !channel) {
                     return 'id_ID'
             }
         }
-        speaker.speak(forcedLanguage ? msg.substring(3) : msg, gTranslateLang(lang))
+        const messageToSpeak = forcedLanguage ? msg.substring(3) : msg
+        speaker.speak(`${message.username}, ${messageToSpeak}`, gTranslateLang(lang))
     }
 
     twitch.onconnect = () => {
@@ -95,10 +97,18 @@ if(!username || !token || !channel) {
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
 String.prototype.pachify = function (username) {
-    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'mentegagoreng', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_']
+    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_', 'mentegagoreng']
     const pachiRegex = /8{3,}/g
     const pachiReplacement = easterEggUsers.includes(username.toLowerCase()) ? 'panci panci panci' : 'パチパチパチ' // Context: 'panci' is Indonesian word for cooking pot. It sounds similar to 'パチ', hence the pun.
     const pachified = this.replace(pachiRegex, pachiReplacement)
 
     return pachified
+}
+
+String.prototype.warafy = function (username) {
+    const waraRegex = /(( |^|\n|\r)w{1,}( |$|\n|\r))/g
+    const waraReplacement = 'わらわら'
+    const warafied = this.replace(waraRegex, waraReplacement)
+
+    return warafied
 }

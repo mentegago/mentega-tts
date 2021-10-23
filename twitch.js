@@ -40,7 +40,9 @@ function Twitch(username, token, channelName) {
                 }
     
                 if(parts[1] == 'PRIVMSG') {
-                    const username = parts[2].substring(1)
+                    const username = parts[0]
+                        .split('!')[0]
+                        .substring(1)
                     const message = parts.slice(3).join(' ').substring(1)
     
                     if(this.onmessage) this.onmessage({ username: username, message: message })
