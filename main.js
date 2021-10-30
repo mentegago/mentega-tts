@@ -48,23 +48,24 @@ if(!username || !token || !channel) {
             const forcedLanguageString = msg.substring(0, 3).toLowerCase()
             switch(forcedLanguageString) {
                 case 'id ':
-                    return 'indonesia'
+                    return 'ind'
                 case 'en ':
-                    return 'english'
+                    return 'eng'
                 case 'jp ':
-                    return 'japanese'
+                    return 'jpn'
             }
 
             return null
         })()
 
         const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
-        const lang = forcedLanguage || detectLanguage(msgForLang)
+        const lang = forcedLanguage || msgForLang.language()
+        console.log(`Language: ${lang}`)
         const gTranslateLang = (lang) => {
             switch(lang.toLowerCase()) {
-                case 'english':
+                case 'eng':
                     return 'en-US'
-                case 'japanese':
+                case 'jpn':
                     return 'ja'
                 default:
                     return 'id_ID'
@@ -97,7 +98,7 @@ if(!username || !token || !channel) {
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
 String.prototype.pachify = function (username) {
-    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_', 'mentegagoreng']
+    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_', 'mentegagoreng', 'sodiumtaro']
     const pachiRegex = /8{3,}/g
     const pachiReplacement = easterEggUsers.includes(username.toLowerCase()) ? 'panci panci panci' : 'パチパチパチ' // Context: 'panci' is Indonesian word for cooking pot. It sounds similar to 'パチ', hence the pun.
     const pachified = this.replace(pachiRegex, pachiReplacement)
@@ -111,4 +112,15 @@ String.prototype.warafy = function (username) {
     const warafied = this.replace(waraRegex, waraReplacement)
 
     return warafied
+}
+
+String.prototype.replaceCommonAbbreviations = function (username) {
+    const commonAbbreviations = [
+        ['gw', 'gue'], ['pls', 'please'], ['iy', 'iya'], ['ngl', 'not gonna lie'], ['tbh', 'to be honest']
+    ]
+}
+
+String.prototype.language = function() {
+    if(this.includes('panci panci panci')) return 'ind' // Handle easter egg
+    return franc(this, { whitelist: ['eng', 'jpn', 'ind'] })
 }
