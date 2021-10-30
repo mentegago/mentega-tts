@@ -59,7 +59,7 @@ if(!username || !token || !channel) {
         })()
 
         const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
-        const lang = forcedLanguage || franc(msgForLang, { whitelist: ['eng', 'jpn', 'ind'] })
+        const lang = forcedLanguage || msgForLang.language()
         console.log(`Language: ${lang}`)
         const gTranslateLang = (lang) => {
             switch(lang.toLowerCase()) {
@@ -118,4 +118,9 @@ String.prototype.replaceCommonAbbreviations = function (username) {
     const commonAbbreviations = [
         ['gw', 'gue'], ['pls', 'please'], ['iy', 'iya'], ['ngl', 'not gonna lie'], ['tbh', 'to be honest']
     ]
+}
+
+String.prototype.language = function() {
+    if(this.includes('panci panci panci')) return 'ind' // Handle easter egg
+    return franc(this, { whitelist: ['eng', 'jpn', 'ind'] })
 }
