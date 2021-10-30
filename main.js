@@ -48,11 +48,11 @@ if(!username || !token || !channel) {
             const forcedLanguageString = msg.substring(0, 3).toLowerCase()
             switch(forcedLanguageString) {
                 case 'id ':
-                    return 'indonesia'
+                    return 'ind'
                 case 'en ':
-                    return 'english'
+                    return 'eng'
                 case 'jp ':
-                    return 'japanese'
+                    return 'jpn'
             }
 
             return null
