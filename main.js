@@ -59,12 +59,13 @@ if(!username || !token || !channel) {
         })()
 
         const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
-        const lang = forcedLanguage || detectLanguage(msgForLang)
+        const lang = forcedLanguage || franc(msgForLang, { whitelist: ['eng', 'jpn', 'ind'] })
+        console.log(`Language: ${lang}`)
         const gTranslateLang = (lang) => {
             switch(lang.toLowerCase()) {
-                case 'english':
+                case 'eng':
                     return 'en-US'
-                case 'japanese':
+                case 'jpn':
                     return 'ja'
                 default:
                     return 'id_ID'
@@ -111,4 +112,10 @@ String.prototype.warafy = function (username) {
     const warafied = this.replace(waraRegex, waraReplacement)
 
     return warafied
+}
+
+String.prototype.replaceCommonAbbreviations = function (username) {
+    const commonAbbreviations = [
+        ['gw', 'gue'], ['pls', 'please'], ['iy', 'iya'], ['ngl', 'not gonna lie'], ['tbh', 'to be honest']
+    ]
 }
