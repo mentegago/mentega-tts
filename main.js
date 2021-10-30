@@ -98,7 +98,7 @@ if(!username || !token || !channel) {
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
 String.prototype.pachify = function (username) {
-    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_', 'mentegagoreng']
+    const easterEggUsers = ['ngeq', 'amikarei', 'bagusnl', 'ozhy27', 'kalamus_pls', 'seiki_ryuuichi', 'cepp18_', 'mentegagoreng', 'sodiumtaro']
     const pachiRegex = /8{3,}/g
     const pachiReplacement = easterEggUsers.includes(username.toLowerCase()) ? 'panci panci panci' : 'パチパチパチ' // Context: 'panci' is Indonesian word for cooking pot. It sounds similar to 'パチ', hence the pun.
     const pachified = this.replace(pachiRegex, pachiReplacement)
