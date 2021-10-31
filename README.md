@@ -29,10 +29,10 @@ If you open the URL in your browser, do note that:
 
 ## Not yet implemented
 - TTS will always ignore chat that starts with exclamation mark (`!`). No option to disable this filtering yet.
-- TTS only read the message, not username.
+- ~~TTS only read the message, not username.~~ TTS now reads username, however there's no way to disable this yet.
 - TTS limits to only 200 characters per message.
 - TTS chat queue limits to only 5 chats. If there are more chat entering the queue, it will remove the oldest one. No option to override yet.
-- When TTS is confused of which language to use, it will choose Indonesian voice as it's the most neutral one (sounds okay for both English and Japanese). No option to override it yet.
+- ~~When TTS is confused of which language to use, it will choose Indonesian voice as it's the most neutral one (sounds okay for both English and Japanese). No option to override it yet.~~ It will now just choose the most probable language between Indonesian, English, or Japanese.
 - Indonesian, English, and Japanese only. Cannot add or remove any of them. Theoretically it's possible to add other languages, but I haven't implemented it yet. I don't think I'll be implementing it anytime soon.
 
 ## Contributing
