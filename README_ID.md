@@ -28,10 +28,10 @@ Peringatan! Jika Anda membuka URL tersebut di browser biasa, pastikan Anda:
 
 ## Belum diimplementasikan
 - TTS akan selalu mengabaikan chat yang diawali dengan tanda seru (`!`).
-- TTS hanya membaca pesan, username tidak.
+- ~~TTS hanya membaca pesan, username tidak.~~ TTS sekarang membaca username, namun belum ada cara untuk mematikannya untuk sekarang.
 - TTS membatasi maksimal 200 karakter per pesan.
 - *Queue* dari TTS dibatasi 5 pesan. Jika ada chat lain yang masuk ke *queue*, maka pesan paling awal akan dihapus.
-- Saat TTS bingung bahasa apa yang digunakan dalam sebuah pesan, TTS akan berbicara menggunakan suara Indonesia karena paling netral.
+- ~~Saat TTS bingung bahasa apa yang digunakan dalam sebuah pesan, TTS akan berbicara menggunakan suara Indonesia karena paling netral.~~ Sekarang TTS memilih bahasa yang paling memungkinkan dari antara Bahasa Indonesia, Inggris, atau Jepang.
 - Hanya mendukung Bahasa Indonesia, Inggris, dan Jepang. Belum ada rencana menambahkan bahasa lain.
 
 ## Kontribusi
