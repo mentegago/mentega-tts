@@ -17,8 +17,8 @@ This software runs on the browser, so you can either open the URL or add it to y
 
 Parameters:
 - `channel`: Channel to which the TTS will run on.
+- (_Optional, required to use !join and !leave command_) `username`: Your username.
 - (_Optional, currently unused_) `token`: Your oauth token. Get your token here: [https://twitchapps.com/tmi/](https://twitchapps.com/tmi/).
-- (_Optional, currently unused_) `username`: Your username.
 - (_Optional_) `hideNotifications`: set to `true` to hide notification message that shows up on top left corner of the screen.
 
 The parameters are put in hash (`#`) instead of query (`?`) so you that your OAuth token never leaves the client (except to Twitch). That way, there's no worry of your OAuth token being logged by any server.
@@ -26,6 +26,11 @@ The parameters are put in hash (`#`) instead of query (`?`) so you that your OAu
 If you open the URL in your browser, do note that:
 1. **You'll need to refresh the page** everytime you change any of the parameters as the software doesn't listen to window hash changes.
 2. **You'll need to click on the page first** on most browsers, or else the audio will be blocked. You can mitigate this by allowing audio autoplay for the page.
+
+## Commands
+You can use these commands in chat to perform actions. **You need to provide your username in the URL parameter (See [Installation](#installation))!**
+- `!join <channel>`: Enable TTS on the specified channel.
+- `!leave <channel>`: Disable TTS on the specified channel. `<channel>` cannot be the main channel set in the URL parameter.
 
 ## Not yet implemented
 - TTS will always ignore chat that starts with exclamation mark (`!`). No option to disable this filtering yet.
