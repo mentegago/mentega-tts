@@ -22,26 +22,31 @@ function showNotification(notification, autoHide = true) {
     }, 2000)
 }
 
-if(!username || !token || !channel) {
+// tmi.js doesn't require username nor token unless we want to send a message.
+// For now, these parameters are unused.
+// if(!username || !token || !channel) {
+if (!channel) {
     showNotification('❌ Improper setup detected. Read README.md for installation instruction! ❌', false)
 } else {
-    const twitch = new Twitch(
-        username, 
-        token.substring(0, 'oauth:'.length) == 'oauth:' ? token : `oauth:${token}`, // Prepend 'oauth:' if user did not put it in.
-        channel
-    )
+    const twitch = new tmi.Client({
+        channels: [channel]
+    })
+
     const speaker = new Speaker()
 
     twitch.connect()
 
-    twitch.onmessage = (message) => {
-        const msg = message.message
+    twitch.on('message', (channel, tags, message, self) => {
+        const msg = message
+            .removeEmotes(tags['emotes'])
+            .replace(/\s{2,}/g, ' ')
             .replace(/(?:https?|ftp):\/\/[\n\S]+/g, '') // Remove all URLs.
-            .pachify(message.username) // パチfy!
-            .warafy(message.username) // わらfy!
+            .pachify(tags['username']) // パチfy!
+            .warafy(tags['username']) // わらfy!
             .substring(0, 200) // Limits to 200 characters
 
         if(msg.substring(0, 1) == '!') return // Ignore message that starts with exclamation mark.
+        if(msg.trim().length == 0) return // Ignore messages that are empty after filtering.
 
         // Start message with 'ID ', 'EN ', or 'JP ' to force the TTS to use a specific language voice.
         const forcedLanguage = (() => {
@@ -60,7 +65,6 @@ if(!username || !token || !channel) {
 
         const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
         const lang = forcedLanguage || msgForLang.language()
-        console.log(`Language: ${lang}`)
         const gTranslateLang = (lang) => {
             switch(lang.toLowerCase()) {
                 case 'eng':
@@ -72,28 +76,26 @@ if(!username || !token || !channel) {
             }
         }
         const messageToSpeak = forcedLanguage ? msg.substring(3) : msg
-        speaker.speak(`${message.username}, ${messageToSpeak}`, gTranslateLang(lang))
-    }
+        speaker.speak(`${tags['username']}, ${messageToSpeak}`, gTranslateLang(lang))
+    })
 
-    twitch.onconnect = () => {
-        showNotification('🧈 Mentega TTS connect to Twitch 🧈')
-    }
+    twitch.on('connected', () => {
+        showNotification('🧈 Mentega TTS connected to Twitch 🧈')
+    })
 
-    twitch.onjoin = (channel) => {
+    twitch.on('join', (channel, username) => {
         showNotification(`🧈 Mentega TTS joined ${channel} 🧈`)
-    }
-
-    twitch.ondisconnect = () => {
+    })
+    
+    twitch.on('disconnected', () => {
         showNotification('❌ Mentega TTS disconnected ❌')
-    }
+    })
 
-    twitch.onleave = (channel) => {
-        showNotification(`👋 Mentega TTS left ${channel} 👋`)
-    }
-
-    twitch.oncommanderror = (message) => {
-        showNotification(`❌ ${message} ❌`)
-    }
+    twitch.on('part', (channel, nick, isSelf) => {
+        if(isSelf) {
+            showNotification(`👋 Mentega TTS left ${channel} 👋`)
+        }
+    })
 }
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
@@ -123,4 +125,28 @@ String.prototype.replaceCommonAbbreviations = function (username) {
 String.prototype.language = function() {
     if(this.includes('panci panci panci')) return 'ind' // Handle easter egg
     return franc(this, { whitelist: ['eng', 'jpn', 'ind'] })
+}
+
+String.prototype.clearRange = function (from, to) {
+    return this.substring(0, from) + ' '.repeat(to-from) + this.substring(to);
+}
+
+String.prototype.removeEmotes = function(emotes) {
+    if(!emotes) return this
+
+    var clearedMessage = this
+        Object
+            .keys(emotes)
+            .forEach(key => {
+                const emoteRanges = emotes[key]
+                emoteRanges.forEach(rangeString => {
+                    const range = rangeString
+                        .split('-', 2)
+                        .map(value => parseInt(value.trim()))
+
+                    clearedMessage = clearedMessage.clearRange(range[0], range[1]+1)
+                })
+            })
+            
+    return clearedMessage
 }
