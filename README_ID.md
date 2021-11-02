@@ -16,8 +16,8 @@ Perangkat lunak ini berjalan di web, jadi Anda bisa membuka URLnya langsung di-b
 
 Parameters:
 - `channel`: Channel Anda.
+- (_Optional, diperlukan untuk menggunakan perintah !join dan !leave_) `username`: Username Anda.
 - (_Optional, currently unused_) `token`: OAuth Token akun Twitch Anda. Dapatkan token di sini: [https://twitchapps.com/tmi/](https://twitchapps.com/tmi/).
-- (_Optional, currently unused_) `username`: Username Anda.
 - (_Optional_) `hideNotifications`: beri nilai `true` untuk menghilangkan notifikasi status yang muncul di atas kiri layar.
 
 Parameter-parameter tersebut ditaruh di hash (`#`), bukan query (`?`), supaya OAuth token Anda tidak terkirim kemanapun selain ke Twitch.
@@ -25,6 +25,11 @@ Parameter-parameter tersebut ditaruh di hash (`#`), bukan query (`?`), supaya OA
 Peringatan! Jika Anda membuka URL tersebut di browser biasa, pastikan Anda:
 1. **Refresh halamannya** tiap kali Anda mengubah nilai dari parameter di atas.
 2. **Klik terlebih dahulu halamannya** kalau tidak audionya akan diblokir oleh browser. Alternatifnya, Anda bisa mengizinkan halaman tersebut untuk melakukan autoplay audio.
+
+## Perintah
+Anda bisa mengirimkan perintah-perintah ini melalui chat kepada TTS. **Anda wajib menyediakan parameter username! (Lihat [Instalasi](#instalasi))!**
+- `!join <channel>`: Mengaktifkan TTS di channel yang ditentukan.
+- `!leave <channel>`: Mematikan TTS di channel yang ditentukan. `<channel>` tidak boleh channel yang diatur di parameter.
 
 ## Belum diimplementasikan
 - TTS akan selalu mengabaikan chat yang diawali dengan tanda seru (`!`).

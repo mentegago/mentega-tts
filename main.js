@@ -34,6 +34,7 @@ if (!channel) {
 
     const speaker = new Speaker()
 
+    showNotification('💭 Connecting... 💭')
     twitch.connect()
 
     twitch.on('message', (channel, tags, message, self) => {
@@ -45,7 +46,10 @@ if (!channel) {
             .warafy(tags['username']) // わらfy!
             .substring(0, 200) // Limits to 200 characters
 
-        if(msg.substring(0, 1) == '!') return // Ignore message that starts with exclamation mark.
+        if(msg.substring(0, 1) == '!') {
+            handleCommand(tags['username'], msg)
+            return // Ignore message that starts with exclamation mark.
+        }
         if(msg.trim().length == 0) return // Ignore messages that are empty after filtering.
 
         // Start message with 'ID ', 'EN ', or 'JP ' to force the TTS to use a specific language voice.
@@ -96,6 +100,28 @@ if (!channel) {
             showNotification(`👋 Mentega TTS left ${channel} 👋`)
         }
     })
+
+    const handleCommand = (user, message) => {
+        if(!username) return // User has not set username.
+        if(user.toLowerCase() != username) return
+
+        const msg = message
+            .toLowerCase()
+            .trim()
+            .split(' ')
+
+        if(msg[0] == '!join') {
+            const targetChannel = msg[1].trim()
+            twitch.join(targetChannel)
+        } else if(msg[0] == '!leave') {
+            const targetChannel = msg[1].trim()
+            if(targetChannel == channel) {
+                showNotification('❌ Cannot leave main channel! ❌')
+            } else {
+                twitch.leave(targetChannel)
+            }
+        }
+    }
 }
 
 // Replace 8888 with パチパチパチ (Except for easter egg users).
