@@ -10,15 +10,15 @@ This software runs on the browser, so you can either open the URL or add it to y
 3. Add this to **the end** of the URL:
 
 ````
-#token={your oauth token}&username={your username}&channel={target channel}
+#channel={target channel}
 ````
 
 4. Fill in the parameters with these values:
 
 Parameters:
-- `token`: Your oauth token. Get your token here: [https://twitchapps.com/tmi/](https://twitchapps.com/tmi/).
-- `username`: Your username.
 - `channel`: Channel to which the TTS will run on.
+- (_Optional, currently unused_) `token`: Your oauth token. Get your token here: [https://twitchapps.com/tmi/](https://twitchapps.com/tmi/).
+- (_Optional, currently unused_) `username`: Your username.
 - (_Optional_) `hideNotifications`: set to `true` to hide notification message that shows up on top left corner of the screen.
 
 The parameters are put in hash (`#`) instead of query (`?`) so you that your OAuth token never leaves the client (except to Twitch). That way, there's no worry of your OAuth token being logged by any server.
