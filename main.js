@@ -37,9 +37,10 @@ if (!channel) {
     showNotification('💭 Connecting... 💭')
     twitch.connect()
 
-    twitch.on('message', (channel, tags, message, self) => {
+    twitch.on('message', async (channel, tags, message, self) => {
         const msg = message
             .removeEmotes(tags['emotes'])
+            .replaceCommonAbbreviations(tags['username'])
             .replace(/\s{2,}/g, ' ')
             .replace(/(?:https?|ftp):\/\/[\n\S]+/g, '') // Remove all URLs.
             .pachify(tags['username']) // パチfy!
@@ -55,32 +56,14 @@ if (!channel) {
         // Start message with 'ID ', 'EN ', or 'JP ' to force the TTS to use a specific language voice.
         const forcedLanguage = (() => {
             const forcedLanguageString = msg.substring(0, 3).toLowerCase()
-            switch(forcedLanguageString) {
-                case 'id ':
-                    return 'ind'
-                case 'en ':
-                    return 'eng'
-                case 'jp ':
-                    return 'jpn'
-            }
-
+            if(forcedLanguageString == 'id' || forcedLanguageString == 'en' || forcedLanguageString == 'jp') return forcedLanguageString
             return null
         })()
 
-        const msgForLang = msg.length >= 35 ? msg : `${msg} `.repeat(25) // String too short for language detection, so let's just hack it!
-        const lang = forcedLanguage || msgForLang.language()
-        const gTranslateLang = (lang) => {
-            switch(lang.toLowerCase()) {
-                case 'eng':
-                    return 'en-US'
-                case 'jpn':
-                    return 'ja'
-                default:
-                    return 'id_ID'
-            }
-        }
+        const lang = forcedLanguage || await getLanguage(msg)
         const messageToSpeak = forcedLanguage ? msg.substring(3) : msg
-        speaker.speak(`${tags['username']}, ${messageToSpeak}`, gTranslateLang(lang))
+        
+        speaker.speak(`${tags['username']}, ${messageToSpeak}`, lang)
     })
 
     twitch.on('connected', () => {
@@ -144,8 +127,19 @@ String.prototype.warafy = function (username) {
 
 String.prototype.replaceCommonAbbreviations = function (username) {
     const commonAbbreviations = [
-        ['gw', 'gue'], ['pls', 'please'], ['iy', 'iya'], ['ngl', 'not gonna lie'], ['tbh', 'to be honest']
+        ['gw', 'gue'], ['pls', 'please'], ['iy', 'iya'], ['ngl', 'not gonna lie'], ['tbh', 'to be honest'], ['ngl', 'not gonna lie'], ['wtf', 'what the fried butter']
     ]
+
+    var text = this.toLowerCase()
+
+    // Replace words in commonAbbreviations with their full word.
+    for(const abbreviation of commonAbbreviations) {
+        const regex = new RegExp(`( |^|\n|\r)(${abbreviation[0]})( |$|\n|\r)`, 'g')
+        const replacement = `$1${abbreviation[1]}$3`
+        text = text.replace(regex, replacement)
+    }
+
+    return text
 }
 
 String.prototype.language = function() {
@@ -161,18 +155,50 @@ String.prototype.removeEmotes = function(emotes) {
     if(!emotes) return this
 
     var clearedMessage = this
-        Object
-            .keys(emotes)
-            .forEach(key => {
-                const emoteRanges = emotes[key]
-                emoteRanges.forEach(rangeString => {
-                    const range = rangeString
-                        .split('-', 2)
-                        .map(value => parseInt(value.trim()))
+    Object
+        .keys(emotes)
+        .forEach(key => {
+            const emoteRanges = emotes[key]
+            emoteRanges.forEach(rangeString => {
+                const range = rangeString
+                    .split('-', 2)
+                    .map(value => parseInt(value.trim()))
 
-                    clearedMessage = clearedMessage.clearRange(range[0], range[1]+1)
-                })
+                clearedMessage = clearedMessage.clearRange(range[0], range[1]+1)
             })
+        })
             
     return clearedMessage
+}
+
+// Get language of text from Google Translate (using fetch).
+const getLanguage = async (text) => {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(text)}`
+    try {
+        const response = await fetch(url)
+        if(!response.ok) throw new Error(`${response.status} ${response.statusText}`)
+        const json = response.json()
+        const lang = json[2]
+
+        if(lang == 'en' || lang == 'ja' || lang == 'id') return lang
+        return getLanguageFranc(text)
+    } catch(error) {
+        console.error(error)
+        return getLanguageFranc(text)
+    }
+}
+
+// Get Language using Franc.
+const getLanguageFranc = (text) => {
+    const msgForLang = text.length >= 35 ? text : `${text} `.repeat(25) // String too short for language detection, so let's just hack it!
+    const francLang = franc(msgForLang, { whitelist: ['eng', 'jpn', 'ind'] })
+
+    switch(francLang) {
+        case 'eng':
+            return 'en'
+        case 'jpn':
+            return 'ja'
+        default:
+            return 'id'
+    }
 }
