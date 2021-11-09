@@ -1,4 +1,5 @@
 # 🧈 Mentega Text-to-Speech 🧈
+## SEBENTAR LAGI PENGEMBANGAN AKAN DIHENTIKAN, DIGANTIKAN OLEH [MENTEGA STREAMKIT](https://github.com/mentegago/streamkit) ##
 Sebuah Text-to-Speech untuk chat Twitch sederhana dengan dukungan tiga bahasa (🇮🇩 Indonesian, 🇺🇸 English, and 🇯🇵 Japanese) sekaligus (meskipun tidak andal). Silakan follow Twitch saya di [https://www.twitch.tv/mentegagoreng](https://www.twitch.tv/mentegagoreng) kalau ingin melihat TTSnya. *Atau follow aja sih tanpa alasan spesifik...*
 
 ## Instalasi

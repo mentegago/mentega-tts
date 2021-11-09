@@ -1,4 +1,5 @@
 # 🧈 Mentega Text-to-Speech 🧈
+## THIS WILL BE DISCONTINUED SOON, REPLACED WITH [MENTEGA STREAMKIT](https://github.com/mentegago/streamkit) ##
 ### [Klik di sini untuk instruksi dalam Bahasa Indonesia](README_ID.md)
 A simple Twitch Text-to-Speech with (very unreliable) multi language (🇮🇩 Indonesian, 🇺🇸 English, and 🇯🇵 Japanese) support! Please follow my Twitch at [https://www.twitch.tv/mentegagoreng](https://www.twitch.tv/mentegagoreng) if you want to see the TTS on action. _Or just follow me anyway. Seriously tho._
 
